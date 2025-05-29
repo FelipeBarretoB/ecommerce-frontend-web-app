@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: "http://localhost:8080/app",
+  apiUrl: "http://api-gateway-service.ecommerce.svc.cluster.local:8080/app",
   jwtToken: "jwtToken"
 };
