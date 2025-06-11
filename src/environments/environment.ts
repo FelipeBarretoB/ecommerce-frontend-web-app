@@ -1,7 +1,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: "http://api-gateway-service:8080/app",
+  apiUrl: "https://api.135.234.190.187.nip.io/app",
   jwtToken: "jwtTokenKey"
 };
 
