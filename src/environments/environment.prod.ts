@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: "http://localhost:8080/app",
+  apiUrl: "https://api.135.234.190.187.nip.io/app",
   jwtToken: "jwtToken"
 };

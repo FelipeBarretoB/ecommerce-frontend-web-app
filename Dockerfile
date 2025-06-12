@@ -1,11 +1,4 @@
-
-FROM node:14-alpine
-RUN npm i -g npm@8.1.4
-RUN npm i -g @angular/cli@13.0.3
-RUN mkdir -p /home/app
-WORKDIR /home/app
-COPY . .
-RUN npm i
-EXPOSE 4200
-CMD ["npm", "start"]
-
+FROM nginx:alpine
+COPY dist/ecommerce-frontend-web-app /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
