@@ -42,12 +42,12 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t pipebarreto/frontend:${{ VERSION }} .
-          docker push pipebarreto/frontend:${{ VERSION }}
+          docker build -t pipebarreto/frontend:$VERSION .
+          docker push pipebarreto/frontend:$VERSION
 
       - name: Trigger Jenkins updatemanifest job
         run: |
           curl -X POST "${{ secrets.JENKINS_URL }}/job/updatemanifest/buildWithParameters" \
             --user "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_TOKEN }}" \
-            --data-urlencode "DOCKERTAG=${{ VERSION }}" \
+            --data-urlencode "DOCKERTAG=$VERSION" \
             --data-urlencode "NAME=user-service"
