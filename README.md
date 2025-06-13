@@ -1,27 +1,33 @@
 # EcommerceFrontendWebApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.3.
+This is the frontend web application for the [ecommerce project](https://github.com/FelipeBarretoB/ecommerce-microservice-backend-app). This application was forked from [this repository](https://github.com/SelimHorri/ecommerce-frontend-web-app) and as it discussed in the ecomerce project read me
+Our project was first and for most a DevOps project and we spent most of out time making pipelines.
 
-## Development server
+Having said that, we just got the frontend working at the most minimal level, we don't promise much will work, but again, we focused in pipelines.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## important
 
-## Code scaffolding
+To use this frontend, add your ip/address to the [this file](./src/environments/environment.prod.ts) for production and [this file](./src/environments/environment.ts) for development.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## pipeline 
 
-## Build
+We use a pipeline to build each new image and push it to the registry. however, when ever you want to do that, pls change the version in the [package.json](./package.json) file, so that the pipeline will build a new image.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+This pipeline also triggers a jenkins pipeline for gitOps, which later updates an argoscd present in azure. You can find the jenkins pipeline [here](https://github.com/FelipeBarretoB/ecommerce-kubernetes-manifest)
 
-## Running unit tests
+Heres a diagram of the pipeline:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```mermaid
+graph TD
+    A[GitHub Push or PR] --> B[Checkout code]
+    B --> C[Set up Node.js]
+    C --> D[Install dependencies - npm ci]
+    D --> E[Install Angular CLI]
+    E --> F[Get version from package.json]
+    F --> G[Build Angular app - ng build]
+    G --> H[Set up Docker Buildx]
+    H --> I[Log in to DockerHub]
+    I --> J[Build and push Docker image]
+    J --> K[Trigger Jenkins updatemanifest job]
+    K --> L[End of pipeline]
+```
