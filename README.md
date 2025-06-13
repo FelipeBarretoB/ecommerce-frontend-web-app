@@ -18,16 +18,26 @@ This pipeline also triggers a jenkins pipeline for gitOps, which later updates a
 Heres a diagram of the pipeline:
 
 ```mermaid
-graph TD
-    A[GitHub Push or PR] --> B[Checkout code]
-    B --> C[Set up Node.js]
-    C --> D[Install dependencies - npm ci]
-    D --> E[Install Angular CLI]
-    E --> F[Get version from package.json]
-    F --> G[Build Angular app - ng build]
-    G --> H[Set up Docker Buildx]
-    H --> I[Log in to DockerHub]
-    I --> J[Build and push Docker image]
-    J --> K[Trigger Jenkins updatemanifest job]
-    K --> L[End of pipeline]
+sequenceDiagram
+    participant Developer
+    participant GitHubActions
+    participant DockerHub
+    participant Jenkins
+
+    Developer->>GitHubActions: Push or PR to master branch
+    GitHubActions->>GitHubActions: Trigger "Build and Release frontend" workflow
+    GitHubActions->>GitHubActions: Checkout code (actions/checkout@v4)
+    GitHubActions->>GitHubActions: Set up Node.js (actions/setup-node@v4)
+    GitHubActions->>GitHubActions: Install dependencies (npm ci)
+    GitHubActions->>GitHubActions: Install Angular CLI (npm install -g @angular/cli)
+    GitHubActions->>GitHubActions: Get version from package.json
+    GitHubActions->>GitHubActions: Build Angular app (ng build)
+    GitHubActions->>GitHubActions: Set up Docker Buildx
+    GitHubActions->>DockerHub: Log in and push Docker image
+    GitHubActions->>Jenkins: Trigger updatemanifest job (curl)
+    alt All steps successful
+        GitHubActions-->>Developer: Notify success
+    else Any step fails
+        GitHubActions-->>Developer: Notify failure
+    end
 ```
